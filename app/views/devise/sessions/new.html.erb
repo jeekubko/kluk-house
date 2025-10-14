@@ -1,26 +1,42 @@
-<h2>Log in</h2>
+<main class="flex-1 flex flex-col items-center justify-center px-4">
+  <!-- Monkey Illustration -->
+  <div class="mb-6 text-6xl"></div>
+  <h1 class="text-3xl font-extrabold text-yellow-900 mb-4">
+    Welcome back to MonkeyFit!
+  </h1>
+  <p class="text-yellow-800 mb-8">Log in to plan your workouts, banana-style </p>
+  <!-- Login Card -->
+  <div class="bg-white rounded-2xl shadow-lg w-full max-w-md p-6">
 
-<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+    <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: 'space-y-4' }) do |f| %>
+      <div class="field">
+        <%= f.label :email, class: 'block text-sm font-semibold text-yellow-900' %>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: 'mt-1 block w-full rounded-lg border border-yellow-300 focus:ring-green-500 focus:border-green-500 px-3 py-2' %>
+      </div>
+
+      <div class="field">
+        <%= f.label :password, class: 'block text-sm font-semibold text-yellow-900' %>
+        <%= f.password_field :password, autocomplete: "current-password", class: 'mt-1 block w-full rounded-lg border border-yellow-300 focus:ring-green-500 focus:border-green-500 px-3 py-2' %>
+      </div>
+
+      <% if devise_mapping.rememberable? %>
+        <div class="flex items-center justify-between text-sm">
+          <%= f.check_box :remember_me, class: 'rounded border-yellow-300 text-green-600 focus:ring-green-500' %>
+          <%= f.label :remember_me, class: 'flex items-center space-x-2 text-yellow-900' %>
+        </div>
+      <% end %>
+
+      <div class="actions">
+        <%= f.submit "Log in", class: 'w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg shadow-lg' %>
+      </div>
+      <!-- Divider -->
+      <div class="flex items-center my-6">
+        <div class="flex-grow border-t border-yellow-300"></div>
+        <span class="mx-3 text-yellow-800 text-sm">or</span>
+        <div class="flex-grow border-t border-yellow-300"></div>
+      </div>
+      <%= render "devise/shared/links" %>
+    <% end %>
+
   </div>
-
-  <div class="field">
-    <%= f.label :password %><br />
-    <%= f.password_field :password, autocomplete: "current-password" %>
-  </div>
-
-  <% if devise_mapping.rememberable? %>
-    <div class="field">
-      <%= f.check_box :remember_me %>
-      <%= f.label :remember_me %>
-    </div>
-  <% end %>
-
-  <div class="actions">
-    <%= f.submit "Log in" %>
-  </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
+</main>
