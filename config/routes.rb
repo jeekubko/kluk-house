@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :exercise_plans
   resources :exercises
   get 'pages/index'
   get 'pages/test'

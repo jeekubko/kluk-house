@@ -9,4 +9,5 @@ class User < ApplicationRecord
 
   has_one_attached :avatar
   has_many :exercises, dependent: :destroy
+  has_many :exercise_plans, dependent: :destroy
 end

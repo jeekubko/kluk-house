@@ -8,6 +8,7 @@
   <%= link_to "Exercises", exercises_path, class: "text-red-600 hover:text-red-800" %>
 
   <% if user_signed_in? %>
+    <%= link_to "My Exercise Plans", exercise_plans_path, class: "text-red-600 hover:text-red-800" %>
     <%= link_to "My Profile", profile_path, class: "text-red-600 hover:text-red-800" %>
     <%= button_to "Log out", destroy_user_session_path, method: :delete, class: "text-red-600 hover:text-red-800" %>
   <% end %>
