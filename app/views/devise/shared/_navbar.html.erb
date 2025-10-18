@@ -9,4 +9,8 @@
       Register
     </a>
   </div>
+  <% if user_signed_in? %>
+    <%= link_to "My Profile", profile_path, class: "text-red-600 hover:text-red-800" %>
+    <%= button_to "Log out", destroy_user_session_path, method: :delete, class: "text-red-600 hover:text-red-800" %>
+  <% end %>
 </nav>
