@@ -8,4 +8,5 @@ class User < ApplicationRecord
          :validatable
 
   has_one_attached :avatar
+  has_many :exercises, dependent: :destroy
 end

@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :exercises
   get 'pages/index'
   get 'pages/test'
   get 'profile', to: 'users#show'
