@@ -1,0 +1,14 @@
+<% if user_signed_in? %>
+  <%= link_to "Edit Profile", edit_profile_path, class: "text-red-600 hover:text-red-800" %>
+<% end %>
+
+<%= current_user.email %>
+<%= current_user.given_name %>
+<%= current_user.family_name %>
+
+<% if current_user.avatar.attached? %>
+  <%= image_tag current_user.avatar.variant(resize_to_limit: [150, 150]),
+                class: "rounded-full shadow-md" %>
+<% else %>
+  <%= image_tag "default_avatar.png", class: "rounded-full" %>
+<% end %>
