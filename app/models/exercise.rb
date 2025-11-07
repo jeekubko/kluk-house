@@ -11,5 +11,5 @@ class Exercise < ApplicationRecord
        },
        _prefix: true
 
-  # has_many :workout_exercises, dependent: :restrict_with_error
+  has_many :exercise_plan_items, dependent: :nullify, inverse_of: :exercise
 end

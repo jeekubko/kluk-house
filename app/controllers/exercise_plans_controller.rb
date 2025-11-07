@@ -3,7 +3,7 @@ class ExercisePlansController < ApplicationController
 
   # GET /exercise_plans or /exercise_plans.json
   def index
-    @exercise_plans = ExercisePlan.all
+    @exercise_plans = current_user.exercise_plans
   end
 
   # GET /exercise_plans/1 or /exercise_plans/1.json
@@ -13,6 +13,10 @@ class ExercisePlansController < ApplicationController
   # GET /exercise_plans/new
   def new
     @exercise_plan = ExercisePlan.new
+
+    if @exercise_plan.exercise_plan_items.empty?
+      @exercise_plan.exercise_plan_items.build
+    end
   end
 
   # GET /exercise_plans/1/edit
@@ -24,6 +28,11 @@ class ExercisePlansController < ApplicationController
     @exercise_plan = current_user.exercise_plans.build(exercise_plan_params)
 
     respond_to do |format|
+      if params[:add_item]
+        @exercise_plan.exercise_plan_items.build
+        return render :new, status: :unprocessable_entity
+      end
+
       if @exercise_plan.save
         format.html do
           redirect_to @exercise_plan,
@@ -42,6 +51,13 @@ class ExercisePlansController < ApplicationController
   # PATCH/PUT /exercise_plans/1 or /exercise_plans/1.json
   def update
     respond_to do |format|
+      if params[:add_item]
+        # merge updates so existing fields aren't lost, then add one more
+        @exercise_plan.assign_attributes(exercise_plan_params)
+        @exercise_plan.exercise_plan_items.build
+        return render :edit, status: :unprocessable_entity
+      end
+
       if @exercise_plan.update(exercise_plan_params)
         format.html do
           redirect_to @exercise_plan,
@@ -76,11 +92,23 @@ class ExercisePlansController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_exercise_plan
-    @exercise_plan = ExercisePlan.find(params[:id])
+    @exercise_plan = current_user.exercise_plans.find(params[:id])
   end
 
   # Only allow a list of trusted parameters through.
   def exercise_plan_params
-    params.require(:exercise_plan).permit(:name, :description)
+    params.require(:exercise_plan).permit(
+      :name,
+      :description,
+      exeErcise_plan_items_attributes: %i[
+        id
+        exercise_id
+        sets
+        reps
+        weight
+        note
+        _destroy
+      ]
+    )
   end
 end
