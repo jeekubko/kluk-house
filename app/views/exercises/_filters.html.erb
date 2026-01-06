@@ -1,0 +1,20 @@
+<div class="inline-flex rounded-md bg-gray-100 p-1">
+  <%= exercise_filter_tabs(system_value: @system, muscle_group: @muscle_group) %>
+</div>
+
+<div class="w-full sm:w-auto">
+  <%= form_with url: exercises_path, method: :get, local: true, class: "flex items-center gap-2" do %>
+    <%= hidden_field_tag :system, @system %>
+
+    <label for="muscle_group" class="text-sm font-medium text-gray-700 whitespace-nowrap">
+      Muscle group
+    </label>
+
+    <%= select_tag :muscle_group,
+        options_for_select(muscle_group_options, @muscle_group),
+        include_blank: "All",
+        class: "rounded-md border-gray-300 text-sm",
+        onchange: "this.form.submit();" %>
+
+  <% end %>
+</div>

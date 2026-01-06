@@ -100,7 +100,7 @@ class ExercisePlansController < ApplicationController
     params.require(:exercise_plan).permit(
       :name,
       :description,
-      exeErcise_plan_items_attributes: %i[
+      exercise_plan_items_attributes: %i[
         id
         exercise_id
         sets

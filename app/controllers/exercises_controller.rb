@@ -1,10 +1,21 @@
 class ExercisesController < ApplicationController
   before_action :set_exercise, only: %i[show edit update destroy]
+  before_action :forbid_system_exercise!, only: %i[edit update destroy]
   skip_before_action :authenticate_user!, only: %i[index show]
 
   # GET /exercises or /exercises.json
   def index
-    @exercises = Exercise.all
+    base = if user_signed_in?
+      current_user.exercises.or(Exercise.where(is_system_exercise: true))
+    else
+      Exercise.where(is_system_exercise: true)
+    end
+
+    @system = params[:system]
+    @muscle_group = params[:muscle_group]
+
+    @exercises = base.by_system_flag(@system)
+                     .by_muscle_group(@muscle_group)
   end
 
   # GET /exercises/1 or /exercises/1.json
@@ -23,6 +34,7 @@ class ExercisesController < ApplicationController
   # POST /exercises or /exercises.json
   def create
     @exercise = current_user.exercises.build(exercise_params)
+    @exercise.is_system_exercise = false
 
     respond_to do |format|
       if @exercise.save
@@ -32,7 +44,7 @@ class ExercisesController < ApplicationController
         format.json { render :show, status: :created, location: @exercise }
       else
         format.html { render :new, status: :unprocessable_entity }
-        format.json do
+        format.json do    
           render json: @exercise.errors, status: :unprocessable_entity
         end
       end
@@ -76,11 +88,21 @@ class ExercisesController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_exercise
-    @exercise = Exercise.find(params[:id])
+    @exercise = if user_signed_in?
+      current_user.exercises.or(Exercise.where(is_system_exercise: true))
+    else
+      Exercise.where(is_system_exercise: true)
+    end.find(params[:id])
   end
 
   # Only allow a list of trusted parameters through.
   def exercise_params
     params.require(:exercise).permit(:name, :description, :muscle_group)
+  end
+
+  def forbid_system_exercise!
+    return unless @exercise.is_system_exercise?
+  
+    redirect_to @exercise, alert: "System exercises cannot be modified." and return
   end
 end
