@@ -1,8 +1,11 @@
 Rails.application.routes.draw do
+  resources :exercise_plan_items
+  resources :exercise_plans
+  resources :exercises
   get 'pages/index'
   get 'pages/test'
   get 'profile', to: 'users#show'
-  devise_for :users
+  devise_for :users, controllers: { registrations: 'users/registrations' }
 
   devise_scope :user do
     get 'profile/edit', to: 'devise/registrations#edit', as: :edit_profile
