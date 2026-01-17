@@ -110,6 +110,7 @@ GEM
       railties (>= 4.1.0)
       responders
       warden (~> 1.2.3)
+    dotenv (3.2.0)
     drb (2.2.3)
     erb (5.0.3)
     erubi (1.13.1)
@@ -328,6 +329,7 @@ DEPENDENCIES
   capybara
   debug
   devise (~> 4.9)
+  dotenv
   image_processing (~> 1.14)
   importmap-rails
   jbuilder
