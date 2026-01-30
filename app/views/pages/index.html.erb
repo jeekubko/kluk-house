@@ -1,4 +1,10 @@
 <div>
   <h1 class="font-bold text-4xl">Pages#index</h1>
   <p>Find me in app/views/pages/index.html.erb</p>
+  Most populat Exercises
+
+  <% Exercise.most_popular(1).each do |exercise| %>
+    <%= exercise.name %>
+  <% end %>
+
 </div>

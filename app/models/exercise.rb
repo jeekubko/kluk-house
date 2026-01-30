@@ -19,5 +19,17 @@ class Exercise < ApplicationRecord
     muscle.present? ? where(muscle_group: muscle) : all
   end
 
+  def self.user_exercises(user)
+    user.exercises.or(Exercise.where(is_system_exercise: true))
+  end
+
+  def self.most_popular(number = 1)
+    where(is_system_exercise: true)
+      .left_joins(:exercise_plan_items)
+      .group(:id)
+      .order(Arel.sql("COUNT(exercise_plan_items.id) DESC"))
+      .limit(number)
+  end
+
   has_many :exercise_plan_items, dependent: :nullify, inverse_of: :exercise
 end

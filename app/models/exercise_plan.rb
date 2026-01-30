@@ -1,4 +1,6 @@
 class ExercisePlan < ApplicationRecord
+  attr_accessor :prompt
+
   belongs_to :user
 
   has_many :exercise_plan_items, dependent: :destroy, inverse_of: :exercise_plan

@@ -110,6 +110,7 @@ GEM
       railties (>= 4.1.0)
       responders
       warden (~> 1.2.3)
+    dotenv (3.2.0)
     drb (2.2.3)
     erb (5.0.3)
     erubi (1.13.1)
@@ -141,6 +142,9 @@ GEM
       actionview (>= 7.0.0)
       activesupport (>= 7.0.0)
     json (2.13.2)
+    json-schema (6.1.0)
+      addressable (~> 2.8)
+      bigdecimal (>= 3.1, < 5)
     logger (1.7.0)
     loofah (2.24.1)
       crass (~> 1.0.2)
@@ -328,9 +332,11 @@ DEPENDENCIES
   capybara
   debug
   devise (~> 4.9)
+  dotenv
   image_processing (~> 1.14)
   importmap-rails
   jbuilder
+  json-schema
   puma (>= 5.0)
   rails (~> 7.1.5, >= 7.1.5.2)
   selenium-webdriver

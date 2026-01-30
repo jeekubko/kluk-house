@@ -19,6 +19,25 @@ class ExercisePlansController < ApplicationController
     end
   end
 
+  # POST /exercise_plans/generate
+  def generate
+    prompt = params[:exercise_plan][:prompt]
+    new_plan = Gemini::ExercisePlanGenerator.new(user: current_user, preferences: prompt).call
+    
+
+    @exercise_plan = current_user.exercise_plans.build(new_plan)
+    @exercise_plan.prompt = prompt
+    unless new_plan
+      @exercise_plan.errors.add(:base, "Gemini didn't eat enough bananas and got cramps 🍌🐒")
+    end
+
+    render :new, status: :unprocessable_entity
+
+  rescue => e
+    redirect_back fallback_location: new_exercise_plan_path,
+    alert: "Bananas out of reach. Gemini gave up 🍌🙈"
+  end
+
   # GET /exercise_plans/1/edit
   def edit
   end

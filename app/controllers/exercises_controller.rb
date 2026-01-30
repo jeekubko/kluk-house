@@ -6,7 +6,7 @@ class ExercisesController < ApplicationController
   # GET /exercises or /exercises.json
   def index
     base = if user_signed_in?
-      current_user.exercises.or(Exercise.where(is_system_exercise: true))
+      Exercise.user_exercises(current_user)
     else
       Exercise.where(is_system_exercise: true)
     end
