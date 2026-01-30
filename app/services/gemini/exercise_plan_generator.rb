@@ -9,19 +9,29 @@ module Gemini
       exercises = allowed_exercises
       prompt = build_prompt(exercises)
 
-      raw_response = Gemini::Client.generate(prompt)
-      text = extract_text(raw_response)
+      3.times do 
+        raw_response = Gemini::Client.generate(prompt)
+        text = extract_text(raw_response)
+        plan = parse_json(text)
+        
+        puts validate(plan)
+        puts plan
+        return plan if validate(plan)
+      end
 
-      plan = parse_json(text)
-      #validate!(plan, exercises)
-
-      plan
+      false
     end
 
     private
 
     def allowed_exercises
-      Exercise.select(:id, :name, :muscle_group)
+      Exercise.user_exercises(@user).map do |exercise|
+        {
+          id: exercise.id,
+          name: exercise.name,
+          muscle_group: exercise.muscle_group
+        }
+      end
     end
 
     def build_prompt(exercises)
@@ -29,8 +39,8 @@ module Gemini
         Create a workout plan based on:
         #{@preferences}
 
-        Use ONLY these exercises (by id):
-        #{exercises.map { |e| "#{e.id}: #{e.name}" }.join("\n")}
+        Use ONLY these exercises:
+        #{exercises}
 
         Follow the provided schema and return JSON only.
       PROMPT
@@ -44,13 +54,27 @@ module Gemini
       JSON.parse(text.gsub(/```json|```/i, "").strip)
     end
 
-    def validate!(plan, exercises)
-      valid_ids = exercises.map(&:id)
-      plan["sessions"].each do |s|
-        s["items"].each do |item|
-          raise "Invalid exercise_id" unless valid_ids.include?(item["exercise_id"])
-        end
-      end
+    def validate_schema(json)
+      JSON::Validator.validate(SCHEMAS[:exercise_plan], json)
     end
+
+    def validate_exercise_ids(json)
+      gemini_exercise_ids = json['exercise_plan_items_attributes'].map { |e| e['exercise_id'] }.uniq
+      user_exercise_ids = Exercise.user_exercises(@user).ids
+
+      diff = gemini_exercise_ids - user_exercise_ids
+
+      diff.empty?
+    end
+
+    # Here you can add more content validations
+    def validate_content(json)
+      validate_exercise_ids(json)
+    end
+
+    def validate(json)
+      validate_schema(json) && validate_content(json)
+    end
+
   end
 end

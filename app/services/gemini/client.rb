@@ -7,7 +7,7 @@ require "net/http"
 
 module Gemini
   class Client
-    ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent"
+    ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent"
     READ_TIMEOUT = 30
 
     def self.generate(prompt)
@@ -29,30 +29,7 @@ module Gemini
         ],
         "generationConfig": {
           "responseMimeType": "application/json",
-          "responseJsonSchema": {
-          "type": "object",
-          "required": ["name", "description", "items"],
-          "additionalProperties": false,
-          "properties": {
-            "name": { "type": "string", "description": "Plan name." },
-            "description": { "type": "string", "description": "Plan description." },
-            "items": {
-              "type": "array",
-              "minItems": 1,
-              "items": {
-                "type": "object",
-                "required": ["exercise_id", "sets", "reps", "weight"],
-                "additionalProperties": false,
-                "properties": {
-                  "exercise_id": { "type": "integer", "minimum": 1 },
-                  "sets": { "type": "integer", "minimum": 1 },
-                  "reps": { "type": "integer", "minimum": 1 },
-                  "weight": { "type": "number", "minimum": 0 }
-                }
-              }
-            }
-          }
-        }
+          "responseJsonSchema": SCHEMAS[:exercise_plan]
       }
 
         
