@@ -1,9 +1,27 @@
+
 <% content_for :title, "New exercise" %>
 
-<div class="md:w-2/3 w-full">
-  <h1 class="font-bold text-4xl">New exercise</h1>
+<div class="w-full max-w-3xl mx-auto">
+  <!-- Header -->
+  <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-6">
+    <div>
+      <p class="text-sm text-yellow-800">Create exercise</p>
+      <h1 class="text-4xl font-extrabold text-yellow-900">New exercise</h1>
+      <p class="mt-2 text-yellow-800">Add a new movement to your library 🐒</p>
+    </div>
 
-  <%= render "form", exercise: @exercise %>
+    <%= link_to "Back", exercises_path,
+      class: "text-center rounded-lg px-4 py-2 bg-yellow-100 text-yellow-900 font-semibold hover:bg-yellow-200 transition cursor-pointer" %>
+  </div>
 
-  <%= link_to "Back to exercises", exercises_path, class: "w-full sm:w-auto text-center mt-2 sm:mt-0 sm:ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
+  <!-- Form card -->
+  <div class="bg-white rounded-2xl shadow-sm border border-yellow-100 p-6">
+    <%= render "form", exercise: @exercise %>
+  </div>
+
+  <!-- Bottom back (mobile friendly) -->
+  <div class="mt-6 sm:hidden">
+    <%= link_to "Back to exercises", exercises_path,
+      class: "block text-center rounded-lg px-4 py-2 bg-yellow-100 text-yellow-900 font-semibold hover:bg-yellow-200 transition cursor-pointer" %>
+  </div>
 </div>

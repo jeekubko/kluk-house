@@ -2,9 +2,9 @@
   <!-- Monkey Illustration -->
   <div class="mb-6 text-6xl"></div>
   <h1 class="text-3xl font-extrabold text-yellow-900 mb-4">
-    Welcome back to MonkeyFit!
+    Welcome back to KľukHouse!
   </h1>
-  <p class="text-yellow-800 mb-8">Log in to plan your workouts, banana-style </p>
+  <p class="text-yellow-800 mb-8">Log in, build your plan, and go bananas</p>
   <!-- Login Card -->
   <div class="bg-white rounded-2xl shadow-lg w-full max-w-md p-6">
 
@@ -20,14 +20,14 @@
       </div>
 
       <% if devise_mapping.rememberable? %>
-        <div class="flex items-center justify-between text-sm">
-          <%= f.check_box :remember_me, class: 'rounded border-yellow-300 text-green-600 focus:ring-green-500' %>
-          <%= f.label :remember_me, class: 'flex items-center space-x-2 text-yellow-900' %>
+        <div class="flex items-center gap-2 text-sm">
+          <%= f.check_box :remember_me, class: "rounded border-yellow-300 text-green-600 focus:ring-green-500 cursor-pointer" %>
+          <%= f.label :remember_me, class: "text-yellow-900 cursor-pointer select-none" %>
         </div>
       <% end %>
 
       <div class="actions">
-        <%= f.submit "Log in", class: 'w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg shadow-lg' %>
+        <%= f.submit "Log in", class: 'w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg shadow-lg cursor-pointer transition transform hover:scale-[1.01]' %>
       </div>
       <!-- Divider -->
       <div class="flex items-center my-6">

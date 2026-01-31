@@ -1,16 +1,72 @@
-<% content_for :title, "Showing exercise" %>
+<% content_for :title, @exercise.name %>
 
-<div class="md:w-2/3 w-full">
+<div class="w-full max-w-3xl mx-auto">
   <% if notice.present? %>
-    <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
+    <p class="mb-6 rounded-xl bg-green-100 text-green-800 px-4 py-3 border border-green-200 font-medium" id="notice">
+      <%= notice %>
+    </p>
   <% end %>
 
-  <h1 class="font-bold text-4xl">Showing exercise</h1>
+  <!-- Header -->
+  <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-6">
+    <div>
+      <p class="text-sm text-yellow-800">Exercise details</p>
+      <h1 class="text-4xl font-extrabold text-yellow-900 leading-tight">
+        <%= @exercise.name %>
+      </h1>
 
-  <%= render @exercise %>
-  <%= link_to "Back to exercises", exercises_path, class: "w-full sm:w-auto text-center mt-2 sm:mt-0 sm:ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-  <% if user_signed_in? && !@exercise.is_system_exercise %>
-    <%= link_to "Edit this exercise", edit_exercise_path(@exercise), class: "w-full sm:w-auto text-center rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-    <%= button_to "Destroy this exercise", @exercise, method: :delete, form_class: "sm:inline-block mt-2 sm:mt-0 sm:ml-2", class: "w-full rounded-md px-3.5 py-2.5 text-white bg-red-600 hover:bg-red-500 font-medium cursor-pointer", data: { turbo_confirm: "Are you sure?" } %>
-  <% end %>
+      <div class="mt-3 flex items-center gap-2 flex-wrap">
+        <span class="inline-flex items-center rounded-full bg-gray-100 text-gray-700 px-3 py-1 text-sm font-semibold">
+          <%= @exercise.muscle_group.to_s.humanize %>
+        </span>
+
+        <% if @exercise.is_system_exercise %>
+          <span class="inline-flex items-center rounded-full bg-yellow-100 text-yellow-900 px-3 py-1 text-sm font-semibold">
+            System
+          </span>
+        <% else %>
+          <span class="inline-flex items-center rounded-full bg-green-100 text-green-800 px-3 py-1 text-sm font-semibold">
+            Custom
+          </span>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Actions (top right on desktop) -->
+    <div class="hidden sm:flex flex-row gap-2 items-center">
+      <%= link_to "Back to exercises", exercises_path,
+        class: "text-center rounded-lg px-4 py-2 bg-yellow-100 text-yellow-900 font-semibold hover:bg-yellow-200 transition cursor-pointer" %>
+
+      <% if user_signed_in? && !@exercise.is_system_exercise %>
+        <%= link_to "Edit", edit_exercise_path(@exercise),
+          class: "text-center rounded-lg px-4 py-2 bg-gray-100 text-gray-800 font-semibold hover:bg-gray-200 transition cursor-pointer" %>
+
+        <%= button_to "Delete", @exercise, method: :delete,
+          form_class: "inline",
+          class: "text-center rounded-lg px-4 py-2 bg-red-600 text-white font-semibold hover:bg-red-500 transition cursor-pointer",
+          data: { turbo_confirm: "Are you sure?" } %>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Content Card -->
+  <div class="bg-white rounded-2xl shadow-sm border border-yellow-100 p-6">
+    <%= render @exercise %>
+  </div>
+
+  <!-- Bottom actions (mobile-friendly) -->
+  <div class="mt-6 flex flex-col sm:hidden gap-2">
+    <%= link_to "Back to exercises", exercises_path,
+      class: "text-center rounded-lg px-4 py-2 bg-yellow-100 text-yellow-900 font-semibold hover:bg-yellow-200 transition cursor-pointer" %>
+
+    <% if user_signed_in? && !@exercise.is_system_exercise %>
+      <%= link_to "Edit", edit_exercise_path(@exercise),
+        class: "text-center rounded-lg px-4 py-2 bg-gray-100 text-gray-800 font-semibold hover:bg-gray-200 transition cursor-pointer" %>
+
+      <%= button_to "Delete", @exercise, method: :delete,
+        form_class: "inline",
+        class: "text-center rounded-lg px-4 py-2 bg-red-600 text-white font-semibold hover:bg-red-500 transition cursor-pointer",
+        data: { turbo_confirm: "Are you sure?" } %>
+    <% end %>
+  </div>
 </div>

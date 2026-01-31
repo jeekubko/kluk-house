@@ -1,31 +1,80 @@
-<% if user_signed_in? %>
-  <%= link_to "Edit Profile", edit_profile_path, class: "text-red-600 hover:text-red-800" %>
-<% end %>
-<div id="<%= dom_id current_user %>" class="w-full sm:w-auto my-5 space-y-5">
-  <%= current_user_avatar %>
-  <div>
-    <strong class="block font-medium mb-1">Email:</strong>
-    <%= current_user.email %>
-  </div>
-  <div>
-    <strong class="block font-medium mb-1">Given Name:</strong>
-    <%= current_user.given_name %>
-  </div>
-  <div>
-    <strong class="block font-medium mb-1">Family Name:</strong>
-    <%= current_user.family_name %>
+<div class="w-full max-w-3xl mx-auto">
+
+  <!-- Header -->
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
+    <div>
+      <p class="text-sm text-yellow-800">Your profile</p>
+      <h1 class="text-4xl font-extrabold text-yellow-900">
+        <%= current_user.given_name.presence || "Athlete" %>
+      </h1>
+    </div>
+
+    <% if user_signed_in? %>
+      <%= link_to "Edit profile", edit_profile_path,
+        class: "text-center rounded-lg px-4 py-2 bg-yellow-100 text-yellow-900 font-semibold hover:bg-yellow-200 transition cursor-pointer" %>
+    <% end %>
   </div>
 
-  <div>
-    <strong class="block font-medium mb-1">Age:</strong>
-    <%= current_user.age %>
-  </div>
-  <div>
-    <strong class="block font-medium mb-1">Height:</strong>
-    <%= current_user.height %>
-  </div>
-  <div>
-    <strong class="block font-medium mb-1">Weight:</strong>
-    <%= current_user.weight %>
+  <!-- Profile Card -->
+  <div class="bg-white rounded-2xl shadow-sm border border-yellow-100 p-6">
+
+    <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6">
+
+      <!-- Avatar -->
+      <div class="flex-shrink-0">
+        <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-yellow-200 shadow-sm bg-yellow-50 flex items-center justify-center">
+          <%= current_user_avatar %>
+        </div>
+      </div>
+
+      <!-- Info -->
+      <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
+
+        <div>
+          <p class="text-xs uppercase tracking-wide text-yellow-700">Email</p>
+          <p class="font-semibold text-yellow-900 break-all">
+            <%= current_user.email %>
+          </p>
+        </div>
+
+        <div>
+          <p class="text-xs uppercase tracking-wide text-yellow-700">Age</p>
+          <p class="font-semibold text-yellow-900">
+            <%= current_user.age || "—" %>
+          </p>
+        </div>
+
+        <div>
+          <p class="text-xs uppercase tracking-wide text-yellow-700">Given name</p>
+          <p class="font-semibold text-yellow-900">
+            <%= current_user.given_name || "—" %>
+          </p>
+        </div>
+
+        <div>
+          <p class="text-xs uppercase tracking-wide text-yellow-700">Family name</p>
+          <p class="font-semibold text-yellow-900">
+            <%= current_user.family_name || "—" %>
+          </p>
+        </div>
+
+        <div>
+          <p class="text-xs uppercase tracking-wide text-yellow-700">Height</p>
+          <p class="font-semibold text-yellow-900">
+            <%= current_user.height.present? ? "#{current_user.height} cm" : "—" %>
+          </p>
+        </div>
+
+        <div>
+          <p class="text-xs uppercase tracking-wide text-yellow-700">Weight</p>
+          <p class="font-semibold text-yellow-900">
+            <%= current_user.weight.present? ? "#{current_user.weight} kg" : "—" %>
+          </p>
+        </div>
+
+      </div>
+    </div>
+
   </div>
 </div>
+
