@@ -1,88 +1,170 @@
-<%= form_with(model: exercise_plan, class: "contents",
-              data: { controller: "ai-confirm" }) do |form| %>
-  <% if exercise_plan.errors.any? %>
-    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-md mt-3">
-      <h2><%= pluralize(exercise_plan.errors.count, "error") %> prohibited this exercise_plan from being saved:</h2>
+<%= form_with(model: exercise_plan, class: "space-y-6", data: { controller: "ai-confirm nested-form" }) do |form| %>
 
-      <ul class="list-disc ml-6">
-        <% exercise_plan.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+  <%= render "shared/error_messages", resource: @exercise_plan %>
+
+  <!-- AI PROMPT -->
+  <div>
+    <div class="flex items-center justify-between gap-3">
+      <%= form.label :prompt, "AI prompt", class: "block text-sm font-semibold text-yellow-900" %>
+      <span class="text-xs text-yellow-700">Optional</span>
     </div>
-  <% end %>
 
-  <div class="my-5">
-    <%= form.label :prompt %>
-    <%= form.text_area :prompt, rows: 4, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": exercise_plan.errors[:description].none?, "border-red-400 focus:outline-red-600": exercise_plan.errors[:description].any?}] %>
+    <%= form.text_area :prompt, rows: 4, class: ["mt-2 block w-full rounded-lg border px-3 py-2 shadow-sm focus:ring-green-500 focus:border-green-500", exercise_plan.errors[:prompt].any? ? "border-red-400" : "border-yellow-300"] %>
+
+    <div class="mt-3">
+      <%= form.submit "Generate with AI", formaction: generate_exercise_plans_path, formmethod: :post, data: { action: "click->ai-confirm#openIfDirty" }, class: "rounded-lg px-5 py-2.5 bg-yellow-100 text-yellow-900 font-semibold hover:bg-yellow-200 transition cursor-pointer" %>
+    </div>
   </div>
 
-  <div class="inline">
-    <%= form.submit 'Generate with AI', formaction: generate_exercise_plans_path, data: { action: "click->ai-confirm#openIfDirty" }, class: "w-full sm:w-auto rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white inline-block font-medium cursor-pointer" %>
+  <hr class="border-yellow-100" />
+
+  <!-- PLAN INFO -->
+  <div class="grid gap-5">
+    <div>
+      <%= form.label :name, class: "block text-sm font-semibold text-yellow-900" %>
+      <%= form.text_field :name, class: ["mt-2 block w-full rounded-lg border px-3 py-2 shadow-sm focus:ring-green-500 focus:border-green-500", exercise_plan.errors[:name].any? ? "border-red-400" : "border-yellow-300"] %>
+    </div>
+
+    <div>
+      <%= form.label :description, class: "block text-sm font-semibold text-yellow-900" %>
+      <%= form.text_area :description, rows: 4, class: ["mt-2 block w-full rounded-lg border px-3 py-2 shadow-sm focus:ring-green-500 focus:border-green-500", exercise_plan.errors[:description].any? ? "border-red-400" : "border-yellow-300"] %>
+    </div>
   </div>
 
-  <div class="my-5">
-    <%= form.label :name %>
-    <%= form.text_field :name, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": exercise_plan.errors[:name].none?, "border-red-400 focus:outline-red-600": exercise_plan.errors[:name].any?}] %>
-  </div>
+  <hr class="border-yellow-100" />
 
-  <div class="my-5">
-    <%= form.label :description %>
-    <%= form.text_area :description, rows: 4, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": exercise_plan.errors[:description].none?, "border-red-400 focus:outline-red-600": exercise_plan.errors[:description].any?}] %>
-  </div>
+  <!-- ITEMS -->
+  <div>
+    <div class="flex items-center justify-between mb-3">
+      <h3 class="text-lg font-extrabold text-yellow-900">Exercises</h3>
 
-  <h3>Items</h3>
-  <div id="items-wrapper">
-    <%= form.fields_for :exercise_plan_items do |item| %>
-      <div class="nested-item" style="margin-bottom: 1rem; border-bottom: 1px solid #ddd; padding-bottom: .75rem;">
-        <div>
-          <%= item.label :exercise_id, "Exercise" %>
-          <%= item.collection_select :exercise_id, Exercise.all, :id, :name, include_blank: true %>
+      <button type="button" data-action="nested-form#add" class="rounded-lg px-4 py-2 bg-gray-100 text-gray-800 font-semibold hover:bg-gray-200 transition cursor-pointer">
+        + Add exercise
+      </button>
+    </div>
+
+    <!-- Existing items -->
+    <div data-nested-form-target="items" class="space-y-3">
+
+      <%= form.fields_for :exercise_plan_items do |item| %>
+        <div data-nested-form-item class="rounded-2xl border border-yellow-100 bg-yellow-50 p-4 space-y-4">
+
+          <!-- destroy flag (hidden) -->
+          <%= item.check_box :_destroy, class: "hidden" %>
+
+          <div>
+            <%= item.label :exercise_id, "Exercise", class: "block text-sm font-semibold text-yellow-900" %>
+            <%= item.collection_select :exercise_id, Exercise.user_exercises(current_user), :id, :name, { include_blank: true }, class: "mt-2 block w-full rounded-lg border border-yellow-300 bg-white px-3 py-2 shadow-sm focus:ring-green-500 focus:border-green-500" %>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div>
+              <%= item.label :sets, class: "block text-sm font-semibold text-yellow-900" %>
+              <%= item.number_field :sets, class: "mt-2 block w-full rounded-lg border border-yellow-300 px-3 py-2 shadow-sm focus:ring-green-500 focus:border-green-500" %>
+            </div>
+
+            <div>
+              <%= item.label :reps, class: "block text-sm font-semibold text-yellow-900" %>
+              <%= item.number_field :reps, class: "mt-2 block w-full rounded-lg border border-yellow-300 px-3 py-2 shadow-sm focus:ring-green-500 focus:border-green-500" %>
+            </div>
+
+            <div>
+              <%= item.label :weight, class: "block text-sm font-semibold text-yellow-900" %>
+              <%= item.number_field :weight, step: 0.5, class: "mt-2 block w-full rounded-lg border border-yellow-300 px-3 py-2 shadow-sm focus:ring-green-500 focus:border-green-500" %>
+              <p class="mt-1 text-xs text-yellow-700">Leave blank for bodyweight</p>
+            </div>
+          </div>
+
+          <div>
+            <%= item.label :note, class: "block text-sm font-semibold text-yellow-900" %>
+            <%= item.text_area :note, rows: 2, class: "mt-2 block w-full rounded-lg border border-yellow-300 px-3 py-2 shadow-sm focus:ring-green-500 focus:border-green-500" %>
+          </div>
+
+          <div class="flex justify-end">
+            <button type="button" data-action="nested-form#remove" class="rounded-lg px-4 py-2 bg-red-600 text-white font-semibold hover:bg-red-500 transition cursor-pointer">
+              Remove
+            </button>
+          </div>
+
         </div>
+      <% end %>
+
+    </div>
+  </div>
+
+  <!-- TEMPLATE FOR NEW ITEMS -->
+  <template data-nested-form-target="template">
+
+    <div data-nested-form-item class="rounded-2xl border border-yellow-100 bg-yellow-50 p-4 space-y-4">
+
+      <input type="hidden" name="exercise_plan[exercise_plan_items_attributes][NEW_RECORD][_destroy]" value="false">
+
+      <div>
+        <label class="block text-sm font-semibold text-yellow-900">Exercise</label>
+
+        <select name="exercise_plan[exercise_plan_items_attributes][NEW_RECORD][exercise_id]" class="mt-2 block w-full rounded-lg border border-yellow-300 bg-white px-3 py-2 shadow-sm focus:ring-green-500 focus:border-green-500">
+          <option value=""></option>
+          <% Exercise.user_exercises(current_user).each do |ex| %>
+            <option value="<%= ex.id %>"><%= ex.name %></option>
+          <% end %>
+        </select>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <div>
-          <%= item.label :sets %>
-          <%= item.number_field :sets %>
-          <%= item.label :reps %>
-          <%= item.number_field :reps %>
-          <%= item.label :weight %>
-          <%= item.number_field :weight, step: 0.5 %>
-        </div>
-        <div>
-          <%= item.label :note %><br>
-          <%= item.text_area :note, rows: 2 %>
+          <label class="block text-sm font-semibold text-yellow-900">Sets</label>
+          <input type="number" name="exercise_plan[exercise_plan_items_attributes][NEW_RECORD][sets]" class="mt-2 block w-full rounded-lg border border-yellow-300 px-3 py-2 shadow-sm focus:ring-green-500 focus:border-green-500">
         </div>
 
-        <!-- Server-side removal: checking this will mark the nested record for destruction on submit -->
         <div>
-          <label>
-            <%= item.check_box :_destroy %> Remove this item
-          </label>
+          <label class="block text-sm font-semibold text-yellow-900">Reps</label>
+          <input type="number" name="exercise_plan[exercise_plan_items_attributes][NEW_RECORD][reps]" class="mt-2 block w-full rounded-lg border border-yellow-300 px-3 py-2 shadow-sm focus:ring-green-500 focus:border-green-500">
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-yellow-900">Weight</label>
+          <input type="number" step="0.5" name="exercise_plan[exercise_plan_items_attributes][NEW_RECORD][weight]" class="mt-2 block w-full rounded-lg border border-yellow-300 px-3 py-2 shadow-sm focus:ring-green-500 focus:border-green-500">
         </div>
       </div>
-    <% end %>
+
+      <div>
+        <label class="block text-sm font-semibold text-yellow-900">Note</label>
+        <textarea rows="2" name="exercise_plan[exercise_plan_items_attributes][NEW_RECORD][note]" class="mt-2 block w-full rounded-lg border border-yellow-300 px-3 py-2 shadow-sm focus:ring-green-500 focus:border-green-500"></textarea>
+      </div>
+
+      <div class="flex justify-end">
+        <button type="button" data-action="nested-form#remove" class="rounded-lg px-4 py-2 bg-red-600 text-white font-semibold hover:bg-red-500 transition cursor-pointer">
+          Remove
+        </button>
+      </div>
+
+    </div>
+
+  </template>
+
+  <!-- SAVE -->
+  <div class="flex flex-col sm:flex-row gap-2 pt-3">
+    <%= form.submit "Save plan", class: "w-full sm:w-auto rounded-lg px-5 py-2.5 bg-green-500 hover:bg-green-600 text-white font-semibold shadow-sm transition cursor-pointer" %>
+
+    <%= link_to "Cancel", exercise_plans_path, class: "w-full sm:w-auto text-center rounded-lg px-5 py-2.5 bg-yellow-100 text-yellow-900 font-semibold hover:bg-yellow-200 transition cursor-pointer" %>
   </div>
 
-  <div class="inline">
-    <%= form.submit "Add item", name: "add_item" %>
-    <%= form.submit class: "w-full sm:w-auto rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white inline-block font-medium cursor-pointer" %>
-  </div>
+  <!-- AI CONFIRM MODAL -->
+  <dialog data-ai-confirm-target="dialog" class="rounded-2xl p-6 backdrop:bg-black/40 border border-yellow-100">
 
-  <!-- Modal -->
-  <dialog data-ai-confirm-target="dialog" class="rounded-xl p-6 backdrop:bg-black/40">
-    <p class="text-sm">
+    <p class="text-sm text-yellow-900 font-semibold">
       This will overwrite the current form. Continue?
     </p>
-    <div class="mt-4 flex gap-2 justify-end">
-      <button type="button"
-              data-action="click->ai-confirm#cancel"
-        class="px-3 py-2 border rounded">
+
+    <div class="mt-4 flex justify-end gap-2">
+      <button type="button" data-action="click->ai-confirm#cancel" class="px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 font-semibold transition cursor-pointer">
         Cancel
       </button>
-      <button type="button"
-              data-action="click->ai-confirm#proceed"
-        class="px-3 py-2 bg-red-600 text-white rounded">
+
+      <button type="button" data-action="click->ai-confirm#proceed" class="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-500 text-white font-semibold transition cursor-pointer">
         Yes, overwrite
       </button>
     </div>
   </dialog>
+
 <% end %>

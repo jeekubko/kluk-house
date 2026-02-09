@@ -1,29 +1,49 @@
 <% content_for :title, "Exercise plans" %>
 
 <div class="w-full">
-  <% if notice.present? %>
-    <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
-  <% end %>
 
   <div class="flex justify-between items-center">
     <h1 class="font-bold text-4xl">Exercise plans</h1>
-    <%= link_to "New exercise plan", new_exercise_plan_path, class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white block font-medium" %>
+    <%= link_to "New exercise plan", new_exercise_plan_path, class: "rounded-lg px-4 py-2 bg-green-500 hover:bg-green-600 text-white font-semibold shadow-sm transition cursor-pointer" %>
   </div>
 
-  <div id="exercise_plans" class="min-w-full divide-y divide-gray-200 space-y-5">
+  <!-- ---------- Plans list ----------- -->
+  <div id="exercise_plans" class="mt-6 space-y-4">
     <% if @exercise_plans.any? %>
       <% @exercise_plans.each do |exercise_plan| %>
-        <div class="flex flex-col sm:flex-row justify-between items-center pb-5 sm:pb-0">
-          <%= render exercise_plan %>
-          <div class="w-full sm:w-auto flex flex-col sm:flex-row space-x-2 space-y-2">
-            <%= link_to "Show", exercise_plan, class: "w-full sm:w-auto text-center rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-            <%= link_to "Edit", edit_exercise_plan_path(exercise_plan), class: "w-full sm:w-auto text-center rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-            <%= button_to "Destroy", exercise_plan, method: :delete, class: "w-full sm:w-auto rounded-md px-3.5 py-2.5 text-white bg-red-600 hover:bg-red-500 font-medium cursor-pointer", data: { turbo_confirm: "Are you sure?" } %>
+
+        <div class="bg-white rounded-2xl shadow-sm border border-yellow-100 p-5 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+
+          <!-- LEFT: content -->
+          <div class="min-w-0">
+            <h2 class="text-lg font-extrabold text-yellow-900 truncate">
+              <%= exercise_plan.name.presence || "Untitled plan" %>
+            </h2>
+
+            <% if exercise_plan.description.present? %>
+              <p class="mt-2 text-sm text-yellow-800 leading-relaxed">
+                <%= truncate(exercise_plan.description, length: 140) %>
+              </p>
+            <% else %>
+              <p class="mt-2 text-sm text-gray-500 italic">No description</p>
+            <% end %>
           </div>
+
+          <!-- RIGHT: actions -->
+          <div class="w-full sm:w-auto flex flex-col sm:flex-row gap-2 sm:items-center sm:justify-end">
+            <%= link_to "Show", exercise_plan, class: "text-center rounded-lg px-4 py-2 bg-yellow-100 text-yellow-900 font-semibold hover:bg-yellow-200 transition cursor-pointer" %>
+            <%= link_to "Edit", edit_exercise_plan_path(exercise_plan), class: "text-center rounded-lg px-4 py-2 bg-gray-100 text-gray-800 font-semibold hover:bg-gray-200 transition cursor-pointer" %>
+            <%= button_to "Delete", exercise_plan, method: :delete, class: "text-center rounded-lg px-4 py-2 bg-red-600 text-white font-semibold hover:bg-red-500 transition cursor-pointer", data: { turbo_confirm: "Are you sure?" } %>
+          </div>
+
         </div>
+
       <% end %>
     <% else %>
-      <p class="text-center my-10">No exercise plans found.</p>
+      <div class="text-center my-12">
+        <p class="text-yellow-900 font-bold text-xl">No exercise plans found.</p>
+        <p class="text-yellow-800 mt-2">Create one and start training 💪🍌</p>
+      </div>
     <% end %>
   </div>
 </div>

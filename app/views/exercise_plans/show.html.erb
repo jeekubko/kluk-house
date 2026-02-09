@@ -1,16 +1,43 @@
-<% content_for :title, "Showing exercise plan" %>
+<% content_for :title, @exercise_plan.name %>
 
-<div class="md:w-2/3 w-full">
-  <% if notice.present? %>
-    <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
-  <% end %>
+<div class="w-full max-w-3xl mx-auto">
 
-  <h1 class="font-bold text-4xl">Showing exercise plan</h1>
+  <!-- Header -->
+  <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-6">
+    <div>
+      <%= render 'shared/header', instance: @exercise_plan %>
 
-  <%= render @exercise_plan %>
-  <%= render @exercise_plan.exercise_plan_items %>
+      <!-- Labels -->
+      <div class="mt-3 flex items-center gap-2 flex-wrap">
+        <span class="inline-flex items-center rounded-full bg-gray-100 text-gray-700 px-3 py-1 text-sm font-semibold">
+          <%= pluralize(@exercise_plan.exercise_plan_items.size, "exercise") %>
+        </span>
+      </div>
+    </div>
 
-  <%= link_to "Edit this exercise plan", edit_exercise_plan_path(@exercise_plan), class: "w-full sm:w-auto text-center rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-  <%= link_to "Back to exercise plans", exercise_plans_path, class: "w-full sm:w-auto text-center mt-2 sm:mt-0 sm:ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-  <%= button_to "Destroy this exercise plan", @exercise_plan, method: :delete, form_class: "sm:inline-block mt-2 sm:mt-0 sm:ml-2", class: "w-full rounded-md px-3.5 py-2.5 text-white bg-red-600 hover:bg-red-500 font-medium cursor-pointer", data: { turbo_confirm: "Are you sure?" } %>
+    <!-- Actions (desktop) -->
+    <%= render 'shared/desktop_actions', show_fields: true, index_path: exercise_plans_path, edit_path: edit_exercise_plan_path(@exercise_plan), instance: @exercise_plan %>
+  </div>
+
+  <!-- Content Card -->
+  <div class="mt-5 bg-white rounded-2xl shadow-sm border border-yellow-100 p-6">
+    <!-- Plan description -->
+    <% if @exercise_plan.description.present? %>
+      <p class="mt-2 text-yellow-800">
+        <%= @exercise_plan.description %>
+      </p>
+    <% end %>
+    <!-- List of exercises -->
+    <h2 class="text-lg font-extrabold text-yellow-900 mb-4">Exercises</h2>
+    <% if @exercise_plan.exercise_plan_items.any? %>
+      <div class="space-y-4">
+        <%= render @exercise_plan.exercise_plan_items %>
+      </div>
+    <% else %>
+      <p class="text-yellow-800">No exercises added yet.</p>
+    <% end %>
+  </div>
+
+  <!-- Actions (mobile) -->
+  <%= render 'shared/mobile_actions', show_fields: true, index_path: exercise_plans_path, edit_path: edit_exercise_plan_path(@exercise_plan), instance: @exercise_plan %>
 </div>

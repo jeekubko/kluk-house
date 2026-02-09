@@ -1,72 +1,157 @@
-<h2>Edit <%= resource_name.to_s.humanize %></h2>
+<% content_for :title, "Edit profile" %>
 
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, multipart: true }) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
+<div class="w-full max-w-3xl mx-auto">
 
-  <div class="field">
-    <%= f.label :password %> <i>(leave blank if you don't want to change it)</i><br />
-    <%= f.password_field :password, autocomplete: "new-password" %>
-    <% if @minimum_password_length %>
-      <br />
-      <em><%= @minimum_password_length %> characters minimum</em>
-    <% end %>
+  <!-- Header -->
+  <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-6">
+    <div>
+      <p class="text-sm text-yellow-800">Account</p>
+      <h1 class="text-4xl font-extrabold text-yellow-900">Edit profile</h1>
+      <p class="mt-2 text-yellow-800">Update your details and keep swinging 🐒🍌</p>
+    </div>
+
+    <%= link_to "Back", profile_path,
+      class: "text-center rounded-lg px-4 py-2 bg-yellow-100 text-yellow-900 font-semibold hover:bg-yellow-200 transition cursor-pointer" %>
   </div>
 
-  <div class="field">
-    <%= f.label :password_confirmation %><br />
-    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
-  </div>
+  <!-- Form card -->
+  <div class="bg-white rounded-2xl shadow-sm border border-yellow-100 p-6">
+    <%= form_for(resource,
+      as: resource_name,
+      url: registration_path(resource_name),
+      html: { method: :put, multipart: true, class: "space-y-6" }) do |f| %>
 
-  <div class="field">
-    <%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i><br />
-    <%= f.password_field :current_password, autocomplete: "current-password" %>
-  </div>
+      <%= render "devise/shared/error_messages", resource: resource %>
 
-  <div class="field">
-    <%= f.label :given_name %><br />
-    <%= f.text_field :given_name, autocomplete: "given_name" %>
-  </div>
+      <!-- Personal info -->
+      <div>
+        <h2 class="text-lg font-extrabold text-yellow-900 mb-4">Personal info</h2>
 
-  <div class="field">
-    <%= f.label :family_name %><br />
-    <%= f.text_field :family_name, autocomplete: "family_name" %>
-  </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div>
+            <%= f.label :given_name, class: "block text-sm font-semibold text-yellow-900" %>
+            <%= f.text_field :given_name, autocomplete: "given-name",
+              class: "mt-2 block w-full rounded-lg border border-yellow-300 px-3 py-2 shadow-sm focus:ring-green-500 focus:border-green-500" %>
+          </div>
 
-  <div class="field">
-    <%= f.label :age %><br />
-    <%= f.text_field :age, autocomplete: "age" %>
-  </div>
+          <div>
+            <%= f.label :family_name, class: "block text-sm font-semibold text-yellow-900" %>
+            <%= f.text_field :family_name, autocomplete: "family-name",
+              class: "mt-2 block w-full rounded-lg border border-yellow-300 px-3 py-2 shadow-sm focus:ring-green-500 focus:border-green-500" %>
+          </div>
 
-  <div class="field">
-    <%= f.label :height %><br />
-    <%= f.text_field :height, autocomplete: "height" %>
-  </div>
+          <div>
+            <%= f.label :age, class: "block text-sm font-semibold text-yellow-900" %>
+            <%= f.number_field :age, min: 0, autocomplete: "off",
+              class: "mt-2 block w-full rounded-lg border border-yellow-300 px-3 py-2 shadow-sm focus:ring-green-500 focus:border-green-500" %>
+          </div>
 
-  <div class="field">
-    <%= f.label :weight %><br />
-    <%= f.text_field :weight, autocomplete: "weight" %>
-  </div>
+          <div>
+            <%= f.label :height, "Height (cm)", class: "block text-sm font-semibold text-yellow-900" %>
+            <%= f.number_field :height, min: 0, autocomplete: "off",
+              class: "mt-2 block w-full rounded-lg border border-yellow-300 px-3 py-2 shadow-sm focus:ring-green-500 focus:border-green-500" %>
+          </div>
 
-  <div class="field">
-    <%= f.label :avatar, "Profile image", class: 'text-yellow-800 mb-8' %>
-    <%= f.file_field :avatar, accept: "image/*" %>
-
-    <% if resource.avatar.attached? %>
-      <div class="mt-4">
-        <%= image_tag resource.avatar.variant(resize_to_limit: [150, 150]),
-                      class: "rounded-full shadow" %>
+          <div class="sm:col-span-2">
+            <%= f.label :weight, "Weight (kg)", class: "block text-sm font-semibold text-yellow-900" %>
+            <%= f.number_field :weight, step: 0.01, min: 0, autocomplete: "off",
+              class: "mt-2 block w-full rounded-lg border border-yellow-300 px-3 py-2 shadow-sm focus:ring-green-500 focus:border-green-500" %>
+          </div>
+        </div>
       </div>
+
+      <hr class="border-yellow-100" />
+
+      <!-- Password -->
+      <div>
+        <h2 class="text-lg font-extrabold text-yellow-900 mb-4">Security</h2>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div>
+            <%= f.label :password, class: "block text-sm font-semibold text-yellow-900" %>
+            <p class="text-xs text-yellow-700 mt-1">Leave blank if you don’t want to change it.</p>
+            <%= f.password_field :password, autocomplete: "new-password",
+              class: "mt-2 block w-full rounded-lg border border-yellow-300 px-3 py-2 shadow-sm focus:ring-green-500 focus:border-green-500" %>
+
+            <% if @minimum_password_length %>
+              <p class="text-xs text-yellow-700 mt-2">
+                Minimum <%= @minimum_password_length %> characters.
+              </p>
+            <% end %>
+          </div>
+
+          <div>
+            <%= f.label :password_confirmation, class: "block text-sm font-semibold text-yellow-900" %>
+            <%= f.password_field :password_confirmation, autocomplete: "new-password",
+              class: "mt-2 block w-full rounded-lg border border-yellow-300 px-3 py-2 shadow-sm focus:ring-green-500 focus:border-green-500" %>
+          </div>
+
+          <div class="sm:col-span-2">
+            <%= f.label :current_password, class: "block text-sm font-semibold text-yellow-900" %>
+            <p class="text-xs text-yellow-700 mt-1">We need your current password to confirm changes.</p>
+            <%= f.password_field :current_password, autocomplete: "current-password",
+              class: "mt-2 block w-full rounded-lg border border-yellow-300 px-3 py-2 shadow-sm focus:ring-green-500 focus:border-green-500" %>
+          </div>
+        </div>
+      </div>
+
+      <hr class="border-yellow-100" />
+
+      <!-- Avatar -->
+      <div>
+        <h2 class="text-lg font-extrabold text-yellow-900 mb-4">Profile image</h2>
+
+        <div class="flex flex-col sm:flex-row gap-6 sm:items-center">
+          <div class="w-24 h-24 rounded-full overflow-hidden border-4 border-yellow-200 shadow-sm bg-yellow-50 flex items-center justify-center">
+            <% if resource.avatar.attached? %>
+              <%= image_tag resource.avatar.variant(resize_to_limit: [200, 200]), class: "w-full h-full object-cover" %>
+            <% else %>
+              <span class="text-yellow-700 font-semibold">No image</span>
+            <% end %>
+          </div>
+
+          <div class="flex-1">
+            
+
+            <!-- nice button style (no JS) -->
+            <div class="mt-2 flex items-center gap-3">
+              <label class="inline-flex items-center rounded-lg bg-yellow-100 px-4 py-2 font-semibold text-yellow-900 hover:bg-yellow-200 cursor-pointer">
+                Choose image
+                <%= f.file_field :avatar, accept: "image/*", class: "hidden" %>
+              </label>
+              
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex flex-col sm:flex-row gap-2 pt-2">
+        <%= f.submit "Update profile",
+          class: "w-full sm:w-auto rounded-lg px-5 py-2.5 bg-green-500 hover:bg-green-600 text-white font-semibold shadow-sm transition cursor-pointer" %>
+
+        <%= link_to "Cancel", profile_path,
+          class: "w-full sm:w-auto text-center rounded-lg px-5 py-2.5 bg-gray-100 text-gray-800 font-semibold hover:bg-gray-200 transition cursor-pointer" %>
+      </div>
+
     <% end %>
   </div>
+
+  <!-- Danger zone -->
+  <div class="mt-8 bg-white rounded-2xl shadow-sm border border-red-200 p-6">
+    <h2 class="text-lg font-extrabold text-red-700">Danger zone</h2>
+    <p class="mt-2 text-sm text-red-700/90">
+      Deleting your account is permanent. This cannot be undone.
+    </p>
+
+    <div class="mt-4">
+      <%= button_to "Cancel my account",
+        registration_path(resource_name),
+        method: :delete,
+        data: { confirm: "Are you sure?", turbo_confirm: "Are you sure?" },
+        class: "rounded-lg px-5 py-2.5 bg-red-600 hover:bg-red-500 text-white font-semibold transition cursor-pointer" %>
+    </div>
+  </div>
 </div>
-
-<div class="actions">
-  <%= f.submit "Update" %>
-</div>
-<% end %>
-
-<h3>Cancel my account</h3>
-
-<div>Unhappy? <%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?", turbo_confirm: "Are you sure?" }, method: :delete %></div>
-
-<%= link_to "Back", :back %>

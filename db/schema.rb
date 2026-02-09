@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_01_05_130807) do
+ActiveRecord::Schema[7.1].define(version: 2026_02_07_161805) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -41,7 +41,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_01_05_130807) do
 
   create_table "exercise_plan_items", force: :cascade do |t|
     t.integer "exercise_plan_id", null: false
-    t.integer "exercise_id"
+    t.integer "exercise_id", null: false
     t.integer "sets"
     t.integer "reps"
     t.float "weight"
@@ -53,7 +53,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_01_05_130807) do
   end
 
   create_table "exercise_plans", force: :cascade do |t|
-    t.string "name"
+    t.string "name", null: false
     t.text "description"
     t.integer "user_id", null: false
     t.datetime "created_at", null: false
@@ -62,9 +62,9 @@ ActiveRecord::Schema[7.1].define(version: 2026_01_05_130807) do
   end
 
   create_table "exercises", force: :cascade do |t|
-    t.string "name"
+    t.string "name", null: false
     t.text "description"
-    t.string "muscle_group"
+    t.string "muscle_group", null: false
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

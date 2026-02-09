@@ -1,0 +1,10 @@
+<% class_name = instance.class.model_name.human %>
+<div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-6">
+  <div>
+    <p class="text-sm text-yellow-800">Create <%= class_name.downcase %></p>
+    <h1 class="text-4xl font-extrabold text-yellow-900">New <%= class_name.downcase %></h1>
+    <p class="mt-2 text-yellow-800"><%= message %></p>
+  </div>
+
+  <%= link_to "Back to #{class_name.pluralize.downcase}", index_path, class: "text-center rounded-lg px-4 py-2 bg-yellow-100 text-yellow-900 font-semibold hover:bg-yellow-200 transition cursor-pointer" %>
+</div>

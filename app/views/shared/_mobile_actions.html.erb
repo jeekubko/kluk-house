@@ -1,0 +1,14 @@
+<div class="mt-6 flex flex-col sm:hidden gap-2">
+  <%= link_to "Back", index_path, class: "text-center rounded-lg px-4 py-2 bg-yellow-100 text-yellow-900 font-semibold hover:bg-yellow-200 transition cursor-pointer" %>
+
+  <% if show_fields %>
+    <%= link_to "Edit", edit_path, class: "text-center rounded-lg px-4 py-2 bg-gray-100 text-gray-800 font-semibold hover:bg-gray-200 transition cursor-pointer" %>
+
+    <% if instance.is_a?(Exercise) %>
+      <% items_count = instance.exercise_plan_items.count %>
+      <%= button_to "Delete", instance, method: :delete, class: "text-center rounded-lg px-4 py-2 bg-red-600 text-white font-semibold hover:bg-red-500 transition cursor-pointer", data: { turbo_confirm: items_count.positive? ? "Deleting this exercise will also delete #{items_count} exercise plan item(s) that use it. Continue?" : "Are you sure?" } %>
+    <% else %>
+      <%= button_to "Delete", instance, method: :delete, form_class: "inline", class: "text-center rounded-lg px-4 py-2 bg-red-600 text-white font-semibold hover:bg-red-500 transition cursor-pointer", data: { turbo_confirm: "Are you sure?" } %>
+    <% end %>
+  <% end %>
+</div>
