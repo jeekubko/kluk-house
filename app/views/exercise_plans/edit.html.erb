@@ -4,18 +4,14 @@
   <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-6">
     <div>
       <p class="text-sm text-yellow-800">Edit plan</p>
-      <h1 class="text-4xl font-extrabold text-yellow-900">
-        <%= @exercise_plan.name.presence || "Exercise plan" %>
-      </h1>
+      <h1 class="text-4xl font-extrabold text-yellow-900"><%= @exercise_plan.name.presence || "Exercise plan" %></h1>
       <p class="mt-2 text-yellow-800">Adjust your plan and its items 🛠️</p>
     </div>
 
     <div class="flex flex-col sm:flex-row gap-2">
-      <%= link_to "View", @exercise_plan,
-        class: "text-center rounded-lg px-4 py-2 bg-yellow-100 text-yellow-900 font-semibold hover:bg-yellow-200 transition cursor-pointer" %>
+      <%= link_to "View", @exercise_plan, class: "text-center rounded-lg px-4 py-2 bg-yellow-100 text-yellow-900 font-semibold hover:bg-yellow-200 transition cursor-pointer" %>
 
-      <%= link_to "Back", exercise_plans_path,
-        class: "text-center rounded-lg px-4 py-2 bg-gray-100 text-gray-800 font-semibold hover:bg-gray-200 transition cursor-pointer" %>
+      <%= link_to "Back", exercise_plans_path, class: "text-center rounded-lg px-4 py-2 bg-gray-100 text-gray-800 font-semibold hover:bg-gray-200 transition cursor-pointer" %>
     </div>
   </div>
 

@@ -3,16 +3,7 @@
 
 <div class="w-full max-w-3xl mx-auto">
   <!-- Header -->
-  <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-6">
-    <div>
-      <p class="text-sm text-yellow-800">Create exercise</p>
-      <h1 class="text-4xl font-extrabold text-yellow-900">New exercise</h1>
-      <p class="mt-2 text-yellow-800">Add a new movement to your library 🐒</p>
-    </div>
-
-    <%= link_to "Back", exercises_path,
-      class: "text-center rounded-lg px-4 py-2 bg-yellow-100 text-yellow-900 font-semibold hover:bg-yellow-200 transition cursor-pointer" %>
-  </div>
+  <%= render "shared/new_header", instance: @exercise, message: 'Add a new movement to your library 🐒', index_path: exercises_path %>
 
   <!-- Form card -->
   <div class="bg-white rounded-2xl shadow-sm border border-yellow-100 p-6">
@@ -21,7 +12,6 @@
 
   <!-- Bottom back (mobile friendly) -->
   <div class="mt-6 sm:hidden">
-    <%= link_to "Back to exercises", exercises_path,
-      class: "block text-center rounded-lg px-4 py-2 bg-yellow-100 text-yellow-900 font-semibold hover:bg-yellow-200 transition cursor-pointer" %>
+    <%= link_to "Back to exercises", exercises_path, class: "block text-center rounded-lg px-4 py-2 bg-yellow-100 text-yellow-900 font-semibold hover:bg-yellow-200 transition cursor-pointer" %>
   </div>
 </div>

@@ -1,4 +1,5 @@
 class Exercise < ApplicationRecord
+  validates :name, :muscle_group, presence: true
   belongs_to :user, optional: true
 
   enum muscle_group: {
@@ -31,5 +32,5 @@ class Exercise < ApplicationRecord
       .limit(number)
   end
 
-  has_many :exercise_plan_items, dependent: :nullify, inverse_of: :exercise
+  has_many :exercise_plan_items, dependent: :destroy, inverse_of: :exercise
 end

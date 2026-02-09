@@ -10,11 +10,7 @@
       Muscle group
     </label>
 
-    <%= select_tag :muscle_group,
-        options_for_select(muscle_group_options, @muscle_group),
-        include_blank: "All",
-        class: "rounded-md border-gray-300 text-sm",
-        onchange: "this.form.submit();" %>
+    <%= select_tag :muscle_group, options_for_select(muscle_group_options, @muscle_group), include_blank: "All", class: "rounded-md border-gray-300 text-sm", onchange: "this.form.submit();" %>
 
   <% end %>
 </div>

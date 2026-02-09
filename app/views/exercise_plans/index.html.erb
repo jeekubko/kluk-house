@@ -1,18 +1,10 @@
 <% content_for :title, "Exercise plans" %>
 
 <div class="w-full">
-  <% if notice.present? %>
-    <p class="mb-6 rounded-xl bg-green-100 text-green-800 px-4 py-3 border border-green-200 font-medium" id="notice">
-      <%= notice %>
-    </p>
-  <% end %>
 
   <div class="flex justify-between items-center">
     <h1 class="font-bold text-4xl">Exercise plans</h1>
-
-    <%= link_to "New exercise plan",
-      new_exercise_plan_path,
-      class: "rounded-lg px-4 py-2 bg-green-500 hover:bg-green-600 text-white font-semibold shadow-sm transition cursor-pointer" %>
+    <%= link_to "New exercise plan", new_exercise_plan_path, class: "rounded-lg px-4 py-2 bg-green-500 hover:bg-green-600 text-white font-semibold shadow-sm transition cursor-pointer" %>
   </div>
 
   <!-- ---------- Plans list ----------- -->
@@ -20,8 +12,7 @@
     <% if @exercise_plans.any? %>
       <% @exercise_plans.each do |exercise_plan| %>
 
-        <div class="bg-white rounded-2xl shadow-sm border border-yellow-100 p-5
-                    flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+        <div class="bg-white rounded-2xl shadow-sm border border-yellow-100 p-5 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
 
           <!-- LEFT: content -->
           <div class="min-w-0">
@@ -40,16 +31,9 @@
 
           <!-- RIGHT: actions -->
           <div class="w-full sm:w-auto flex flex-col sm:flex-row gap-2 sm:items-center sm:justify-end">
-            <%= link_to "Show", exercise_plan,
-              class: "text-center rounded-lg px-4 py-2 bg-yellow-100 text-yellow-900 font-semibold hover:bg-yellow-200 transition cursor-pointer" %>
-
-            <%= link_to "Edit", edit_exercise_plan_path(exercise_plan),
-              class: "text-center rounded-lg px-4 py-2 bg-gray-100 text-gray-800 font-semibold hover:bg-gray-200 transition cursor-pointer" %>
-
-            <%= button_to "Delete", exercise_plan,
-              method: :delete,
-              class: "text-center rounded-lg px-4 py-2 bg-red-600 text-white font-semibold hover:bg-red-500 transition cursor-pointer",
-              data: { turbo_confirm: "Are you sure?" } %>
+            <%= link_to "Show", exercise_plan, class: "text-center rounded-lg px-4 py-2 bg-yellow-100 text-yellow-900 font-semibold hover:bg-yellow-200 transition cursor-pointer" %>
+            <%= link_to "Edit", edit_exercise_plan_path(exercise_plan), class: "text-center rounded-lg px-4 py-2 bg-gray-100 text-gray-800 font-semibold hover:bg-gray-200 transition cursor-pointer" %>
+            <%= button_to "Delete", exercise_plan, method: :delete, class: "text-center rounded-lg px-4 py-2 bg-red-600 text-white font-semibold hover:bg-red-500 transition cursor-pointer", data: { turbo_confirm: "Are you sure?" } %>
           </div>
 
         </div>

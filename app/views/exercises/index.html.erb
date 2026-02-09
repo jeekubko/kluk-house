@@ -1,9 +1,6 @@
 <% content_for :title, "Exercises" %>
 
 <div class="w-full">
-  <% if notice.present? %>
-    <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
-  <% end %>
 
   <div class="flex justify-between items-center">
     <h1 class="font-bold text-4xl">Exercises</h1>
@@ -60,16 +57,12 @@
 
           <!-- Right: actions -->
           <div class="flex flex-col sm:flex-row gap-2 sm:items-center sm:justify-end">
-            <%= link_to "Show", exercise,
-            class: "text-center rounded-lg px-4 py-2 bg-yellow-100 text-yellow-900 font-semibold hover:bg-yellow-200 transition cursor-pointer" %>
+            <%= link_to "Show", exercise, class: "text-center rounded-lg px-4 py-2 bg-yellow-100 text-yellow-900 font-semibold hover:bg-yellow-200 transition cursor-pointer" %>
 
             <% if user_signed_in? && !exercise.is_system_exercise %>
-              <%= link_to "Edit", edit_exercise_path(exercise),
-              class: "text-center rounded-lg px-4 py-2 bg-gray-100 text-gray-800 font-semibold hover:bg-gray-200 transition cursor-pointer" %>
-
-              <%= button_to "Delete", exercise, method: :delete,
-              class: "text-center rounded-lg px-4 py-2 bg-red-600 text-white font-semibold hover:bg-red-500 transition cursor-pointer",
-              data: { turbo_confirm: "Are you sure?" } %>
+              <%= link_to "Edit", edit_exercise_path(exercise), class: "text-center rounded-lg px-4 py-2 bg-gray-100 text-gray-800 font-semibold hover:bg-gray-200 transition cursor-pointer" %>
+              <% items_count = exercise.exercise_plan_items.count %>
+              <%= button_to "Delete", exercise, method: :delete, class: "text-center rounded-lg px-4 py-2 bg-red-600 text-white font-semibold hover:bg-red-500 transition cursor-pointer", data: { turbo_confirm: items_count.positive? ? "Deleting this exercise will also delete #{items_count} exercise plan item(s) that use it. Continue?" : "Are you sure?" } %>
             <% end %>
           </div>
         </div>

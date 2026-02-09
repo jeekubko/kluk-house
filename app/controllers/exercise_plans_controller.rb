@@ -22,6 +22,9 @@ class ExercisePlansController < ApplicationController
   # POST /exercise_plans/generate
   def generate
     prompt = params[:exercise_plan][:prompt]
+    puts "###############"
+    puts prompt
+    puts "###############"
     new_plan = Gemini::ExercisePlanGenerator.new(user: current_user, preferences: prompt).call
     
 

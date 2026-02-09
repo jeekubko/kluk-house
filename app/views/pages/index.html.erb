@@ -12,58 +12,14 @@
 
     <div class="mt-6 flex flex-col sm:flex-row justify-center gap-3">
       <% if user_signed_in? %>
-        <%= link_to "My exercise plans",
-          exercise_plans_path,
-          class: "rounded-lg px-6 py-3 bg-green-500 hover:bg-green-600 text-white font-semibold shadow-sm transition cursor-pointer" %>
+        <%= link_to "My exercise plans", exercise_plans_path, class: "rounded-lg px-6 py-3 bg-green-500 hover:bg-green-600 text-white font-semibold shadow-sm transition cursor-pointer" %>
       <% else %>
-        <%= link_to "Get started",
-          new_user_registration_path,
-          class: "rounded-lg px-6 py-3 bg-green-500 hover:bg-green-600 text-white font-semibold shadow-sm transition cursor-pointer" %>
-
-        <%= link_to "Log in",
-          new_user_session_path,
-          class: "rounded-lg px-6 py-3 bg-yellow-100 hover:bg-yellow-200 text-yellow-900 font-semibold transition cursor-pointer" %>
+        <%= link_to "Get started", new_user_registration_path, class: "rounded-lg px-6 py-3 bg-green-500 hover:bg-green-600 text-white font-semibold shadow-sm transition cursor-pointer" %>
+        <%= link_to "Log in", new_user_session_path, class: "rounded-lg px-6 py-3 bg-yellow-100 hover:bg-yellow-200 text-yellow-900 font-semibold transition cursor-pointer" %>
       <% end %>
     </div>
   </div>
 
   <!-- Popular exercises -->
-  <div class="bg-white rounded-2xl shadow-sm border border-yellow-100 p-6">
-    <div class="flex items-center justify-between mb-4">
-      <h2 class="text-xl font-extrabold text-yellow-900">
-        🔥 Most popular exercise
-      </h2>
-
-      <%= link_to "View all",
-        exercises_path,
-        class: "text-sm font-semibold text-yellow-900 hover:underline" %>
-    </div>
-
-    <% popular = Exercise.most_popular(1) %>
-
-    <% if popular.any? %>
-      <% popular.each do |exercise| %>
-        <div class="flex items-center justify-between bg-yellow-50 rounded-xl p-4 border border-yellow-100">
-          <div>
-            <p class="font-semibold text-yellow-900">
-              <%= exercise.name %>
-            </p>
-
-            <p class="text-sm text-yellow-800">
-              <%= exercise.muscle_group.to_s.humanize %>
-            </p>
-          </div>
-
-          <%= link_to "View",
-            exercise_path(exercise),
-            class: "rounded-lg px-4 py-2 bg-yellow-100 hover:bg-yellow-200 text-yellow-900 font-semibold transition cursor-pointer" %>
-        </div>
-      <% end %>
-    <% else %>
-      <p class="text-yellow-800 italic">
-        No popular exercises yet.
-      </p>
-    <% end %>
-  </div>
-
+  <%= render "most_popular_exercises" %>
 </div>
